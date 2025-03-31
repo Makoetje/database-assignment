@@ -781,6 +781,84 @@ mysql>
 mysql> DELIMITER ;
 mysql>
 
+mysql> SELECT
+    ->     TRIGGER_NAME,
+    ->     EVENT_MANIPULATION,
+    ->     EVENT_OBJECT_TABLE,
+    ->     ACTION_TIMING,
+    ->     EVENT_OBJECT_SCHEMA,
+    ->     ACTION_STATEMENT
+    -> FROM
+    ->     information_schema.TRIGGERS
+    -> WHERE
+    ->     TRIGGER_SCHEMA = 'tt_holding';
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+| TRIGGER_NAME                   | EVENT_MANIPULATION | EVENT_OBJECT_TABLE | ACTION_TIMING | EVENT_OBJECT_SCHEMA | ACTION_STATEMENT                                                                                                      |
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+| after_insert_Organization_1    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Organization', NEW.OrganizationID);
+END       |
+| after_insert_Organization_2    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
+
+    UPDATE Organization SET CreatedAt = NOW() WHERE OrganizationID = NEW.OrganizationID;
+END               |
+| after_insert_Employment_1      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Employment', NEW.EmploymentID);
+END           |
+| after_insert_Employment_2      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
+
+    UPDATE Employment SET Bonus = 500.00 WHERE EmploymentID = NEW.EmploymentID;
+END                        |
+| after_insert_PartTimeEmployee  | INSERT             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PartTimeEmployee', NEW.PersonID);
+END         |
+| after_update_PartTimeEmployee  | UPDATE             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PartTimeEmployee', NEW.PersonID);
+END         |
+| after_insert_PermanentEmployee | INSERT             | permanentemployee  | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PermanentEmployee', NEW.PersonID);
+END        |
+| after_delete_PermanentEmployee | DELETE             | permanentemployee  | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PermanentEmployee', OLD.PersonID);
+END        |
+| after_insert_Person            | INSERT             | person             | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Person', NEW.PersonID);
+END                   |
+| after_update_Person            | UPDATE             | person             | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Person', NEW.PersonID);
+END                   |
+| after_insert_Position          | INSERT             | position           | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Position', NEW.PositionID);
+END               |
+| after_update_Position          | UPDATE             | position           | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Position', NEW.PositionID);
+END               |
+| after_insert_PositionHolding   | INSERT             | positionholding    | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PositionHolding', NEW.PositionHoldingID);
+END |
+| after_update_PositionHolding   | UPDATE             | positionholding    | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PositionHolding', NEW.PositionHoldingID);
+END |
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+14 rows in set (0.13 sec)
+
+mysql>   
+
+
+
+
 
 
 
@@ -866,80 +944,4 @@ Query OK, 0 rows affected (0.24 sec)
 
 mysql> GRANT SELECT, DELETE, UPDATE, INSERT ON positionholding TO 'MOSITO@localhost';
 Query OK, 0 rows affected (0.09 sec)
-
-mysql> SELECT
-    ->     TRIGGER_NAME,
-    ->     EVENT_MANIPULATION,
-    ->     EVENT_OBJECT_TABLE,
-    ->     ACTION_TIMING,
-    ->     EVENT_OBJECT_SCHEMA,
-    ->     ACTION_STATEMENT
-    -> FROM
-    ->     information_schema.TRIGGERS
-    -> WHERE
-    ->     TRIGGER_SCHEMA = 'tt_holding';
-+--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
-| TRIGGER_NAME                   | EVENT_MANIPULATION | EVENT_OBJECT_TABLE | ACTION_TIMING | EVENT_OBJECT_SCHEMA | ACTION_STATEMENT                                                                                                      |
-+--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
-| after_insert_Organization_1    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Organization', NEW.OrganizationID);
-END       |
-| after_insert_Organization_2    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
-
-    UPDATE Organization SET CreatedAt = NOW() WHERE OrganizationID = NEW.OrganizationID;
-END               |
-| after_insert_Employment_1      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Employment', NEW.EmploymentID);
-END           |
-| after_insert_Employment_2      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
-
-    UPDATE Employment SET Bonus = 500.00 WHERE EmploymentID = NEW.EmploymentID;
-END                        |
-| after_insert_PartTimeEmployee  | INSERT             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PartTimeEmployee', NEW.PersonID);
-END         |
-| after_update_PartTimeEmployee  | UPDATE             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PartTimeEmployee', NEW.PersonID);
-END         |
-| after_insert_PermanentEmployee | INSERT             | permanentemployee  | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PermanentEmployee', NEW.PersonID);
-END        |
-| after_delete_PermanentEmployee | DELETE             | permanentemployee  | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PermanentEmployee', OLD.PersonID);
-END        |
-| after_insert_Person            | INSERT             | person             | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Person', NEW.PersonID);
-END                   |
-| after_update_Person            | UPDATE             | person             | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Person', NEW.PersonID);
-END                   |
-| after_insert_Position          | INSERT             | position           | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Position', NEW.PositionID);
-END               |
-| after_update_Position          | UPDATE             | position           | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('Position', NEW.PositionID);
-END               |
-| after_insert_PositionHolding   | INSERT             | positionholding    | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PositionHolding', NEW.PositionHoldingID);
-END |
-| after_update_PositionHolding   | UPDATE             | positionholding    | AFTER         | tt_holding          | BEGIN
-    INSERT INTO InsertAudit (TableName, InsertedID)
-    VALUES ('PositionHolding', NEW.PositionHoldingID);
-END |
-+--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
-14 rows in set (0.13 sec)
-
-mysql>   
-
 
