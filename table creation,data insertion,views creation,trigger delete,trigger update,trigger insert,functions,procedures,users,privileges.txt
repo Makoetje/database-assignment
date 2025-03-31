@@ -1,0 +1,945 @@
+
+mysql> use tt_holding;
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_tt_holding |
++----------------------+
+| employment           |
+| organization         |
+| person               |
+| position             |
+| positionholding      |
++----------------------+
+5 rows in set (0.04 sec)
+
+mysql> CREATE TABLE PermanentEmployee (
+    ->     PersonID INT PRIMARY KEY,
+    ->     ExtraBonus DECIMAL(10, 2),
+    ->     Credit DECIMAL(10, 2),
+    ->     FOREIGN KEY (PersonID) REFERENCES Person(PersonID)
+    -> );
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> CREATE TABLE PartTimeEmployee (
+    ->     PersonID INT PRIMARY KEY,
+    ->     ExtraHours INT,
+    ->     FOREIGN KEY (PersonID) REFERENCES Person(PersonID)
+    -> );
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_tt_holding |
++----------------------+
+| employment           |
+| organization         |
+| parttimeemployee     |
+| permanentemployee    |
+| person               |
+| position             |
+| positionholding      |
++----------------------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO Person (Name, Address, PhoneNumber, BirthDate) VALUES
+    -> ('Mokopu Mokopu', '123 Main St, Maseru', '1234567890', '1990-01-01'),
+    -> ('Seshabo Mokopu', '234 Elm St, Maseru', '1234567891', '1988-02-02'),
+    -> ('Makoetje Mokopu', '345 Oak St, Maseru', '1234567892', '1992-03-03'),
+    -> ('Thabelo Mokopu', '456 Pine St, Maseru', '1234567893', '1985-04-04'),
+    -> ('Selebalo Tefo', '567 Maple St, Maseru', '1234567894', '1975-05-05'),
+    -> ('Lepu Lepu', '678 Birch St, Maseru', '1234567895', '1995-06-06'),
+    -> ('Mosito Mosito', '789 Cedar St, Maseru', '1234567896', '1993-07-07'),
+    -> ('Mothibeli Mothibeli', '890 Willow St, Maseru', '1234567897', '1980-08-08'),
+    -> ('Thato Thato', '1010 Fir St, Maseru', '1234567898', '1998-09-09'),
+    -> ('Bohashana Bohashana', '2020 Spruce St, Maseru', '1234567899', '1991-10-10'),
+    -> ('Tebello Tebello', '3030 Cherry St, Maseru', '1234567800', '1989-11-11'),
+    -> ('Pitso Pitso', '4040 Chestnut St, Maseru', '1234567801', '1994-12-12'),
+    -> ('Kgotso Kgotso', '5050 Ash St, Maseru', '1234567802', '1986-09-15'),
+    -> ('Moeletsi Moeletsi', '6060 Acorn St, Maseru', '1234567803', '1997-03-19'),
+    -> ('Matšela Matšela', '7070 Linden St, Maseru', '1234567804', '1992-07-23'),
+    -> ('Tšiu Tšiu', '8080 Maplewood St, Maseru', '1234567805', '1984-12-30');
+Query OK, 16 rows affected (0.03 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Organization (Name, Address, PhoneNumber, BudgetNumber) VALUES
+    -> ('Organization A', '10 Business Rd, Maseru', '2345678901', 'BU123'),
+    -> ('Organization B', '20 Commerce St, Maseru', '2345678902', 'BU456'),
+    -> ('Organization C', '30 Industry Rd, Maseru', '2345678903', 'BU789'),
+    -> ('Organization D', '40 Trade St, Maseru', '2345678904', 'BU101'),
+    -> ('Organization E', '50 Market St, Maseru', '2345678905', 'BU112'),
+    -> ('Organization F', '60 Corporate Way, Maseru', '2345678906', 'BU131');
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Employment (PersonID, OrganizationID, EmploymentDate, TerminationDate, Bonus) VALUES
+    -> (1, 1, '2020-01-01', NULL, 1500.00),
+    -> (2, 1, '2021-02-15', NULL, 2000.00),
+    -> (3, 2, '2019-03-01', NULL, 2500.00),
+    -> (4, 2, '2020-04-01', '2023-01-01', 1000.00),
+    -> (5, 3, '2018-05-01', NULL, 1200.00),
+    -> (6, 3, '2020-06-01', NULL, 1800.00),
+    -> (7, 4, '2021-07-01', NULL, 1600.00),
+    -> (8, 4, '2022-07-01', NULL, 1400.00),
+    -> (9, 5, '2023-08-01', NULL, 1100.00),
+    -> (10, 5, '2017-09-01', '2022-09-01', 900.00),
+    -> (11, 6, '2016-10-01', NULL, 3000.00),
+    -> (12, 1, '2020-11-01', NULL, 1000.00),
+    -> (13, 2, '2021-12-01', NULL, 1700.00),
+    -> (14, 3, '2022-01-01', NULL, 1350.00),
+    -> (15, 3, '2020-02-01', NULL, 1550.00),
+    -> (16, 4, '2020-03-01', NULL, 1250.00);
+Query OK, 16 rows affected (0.03 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Position (Title, ResponsibleOrganizationID) VALUES
+    -> ('Manager', 1),
+    -> ('Assistant Manager', 1),
+    -> ('Team Leader', 2),
+    -> ('Senior Developer', 2),
+    -> ('Junior Developer', 3),
+    -> ('Intern', 3);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO PositionHolding (EmploymentID, PositionID, StartDate, TerminationDate, Salary) VALUES
+    -> (1, 1, '2020-01-01', NULL, 50000.00),
+    -> (2, 2, '2021-02-15', NULL, 35000.00),
+    -> (3, 3, '2019-03-01', NULL, 60000.00),
+    -> (4, 4, '2020-04-01', '2023-01-01', 70000.00),
+    -> (5, 5, '2018-05-01', NULL, 40000.00),
+    -> (6, 6, '2020-06-01', NULL, 30000.00),
+    -> (7, 1, '2021-07-01', NULL, 55000.00),
+    -> (8, 2, '2022-07-01', NULL, 38000.00),
+    -> (9, 3, '2023-08-01', NULL, 62000.00),
+    -> (10, 4, '2017-09-01', '2022-09-01', 45000.00),
+    -> (11, 5, '2016-10-01', NULL, 29500.00),
+    -> (12, 1, '2020-11-01', NULL, 51500.00),
+    -> (13, 2, '2021-12-01', NULL, 33000.00),
+    -> (14, 3, '2022-01-01', NULL, 58000.00),
+    -> (15, 3, '2020-02-01', NULL, 42500.00),
+    -> (16, 4, '2020-03-01', NULL, 52000.00);
+Query OK, 16 rows affected (0.03 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO PermanentEmployee (PersonID, ExtraBonus, Credit) VALUES
+    -> (1, 500.00, 1000.00),
+    -> (2, 750.00, 1200.00),
+    -> (3, 300.00, 800.00),
+    -> (4, 650.00, 1500.00),
+    -> (5, 1000.00, 2000.00),
+    -> (6, 550.00, 900.00),
+    -> (7, 400.00, 950.00),
+    -> (8, 600.00, 1100.00),
+    -> (9, 300.00, 950.00),
+    -> (10, 500.00, 1200.00),
+    -> (11, 700.00, 1400.00),
+    -> (12, 800.00, 1300.00),
+    -> (13, 650.00, 1600.00),
+    -> (14, 550.00, 1190.00),
+    -> (15, 350.00, 870.00),
+    -> (16, 400.00, 1050.00);
+Query OK, 16 rows affected (0.08 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO PartTimeEmployee (PersonID, ExtraHours) VALUES
+    -> (1, 5),
+    -> (2, 10),
+    -> (3, 2),
+    -> (4, 15),
+    -> (5, 12),
+    -> (6, 8),
+    -> (7, 4),
+    -> (8, 6),
+    -> (9, 11),
+    -> (10, 3),
+    -> (11, 9),
+    -> (12, 5),
+    -> (13, 7),
+    -> (14, 2),
+    -> (15, 8),
+    -> (16, 12);
+Query OK, 16 rows affected (0.02 sec)
+Records: 16  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO `Position` (Title, ResponsibleOrganizationID) VALUES
+    -> ('HR Manager', 1),
+    -> ('Project Manager', 1),
+    -> ('Software Engineer', 2),
+    -> ('Database Administrator', 2),
+    -> ('QA Engineer', 3),
+    -> ('Business Analyst', 3),
+    -> ('UX/UI Designer', 2),
+    -> ('System Administrator', 3),
+    -> ('Network Engineer', 2),
+    -> ('Technical Writer', 1);
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Organization (Name, Address, PhoneNumber, BudgetNumber) VALUES
+    -> ('Organization G', '70 Innovation Blvd, Maseru', '2345678907', 'BU415'),
+    -> ('Organization H', '80 Development Dr, Maseru', '2345678908', 'BU516'),
+    -> ('Organization I', '90 Growth Ave, Maseru', '2345678909', 'BU617'),
+    -> ('Organization J', '100 Strategy St, Maseru', '2345678910', 'BU718'),
+    -> ('Organization K', '110 Success Ln, Maseru', '2345678911', 'BU819'),
+    -> ('Organization L', '120 Vision Rd, Maseru', '2345678912', 'BU920'),
+    -> ('Organization M', '130 Leadership Blvd, Maseru', '2345678913', 'BU021'),
+    -> ('Organization N', '140 Innovation Park, Maseru', '2345678914', 'BU122'),
+    -> ('Organization O', '150 Partnership St, Maseru', '2345678915', 'BU223'),
+    -> ('Organization P', '160 Collaboration Blvd, Maseru', '2345678916', 'BU324');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from Organization;
++----------------+----------------+--------------------------------+-------------+--------------+
+| OrganizationID | Name           | Address                        | PhoneNumber | BudgetNumber |
++----------------+----------------+--------------------------------+-------------+--------------+
+|              1 | Organization A | 10 Business Rd, Maseru         | 2345678901  | BU123        |
+|              2 | Organization B | 20 Commerce St, Maseru         | 2345678902  | BU456        |
+|              3 | Organization C | 30 Industry Rd, Maseru         | 2345678903  | BU789        |
+|              4 | Organization D | 40 Trade St, Maseru            | 2345678904  | BU101        |
+|              5 | Organization E | 50 Market St, Maseru           | 2345678905  | BU112        |
+|              6 | Organization F | 60 Corporate Way, Maseru       | 2345678906  | BU131        |
+|              7 | Organization G | 70 Innovation Blvd, Maseru     | 2345678907  | BU415        |
+|              8 | Organization H | 80 Development Dr, Maseru      | 2345678908  | BU516        |
+|              9 | Organization I | 90 Growth Ave, Maseru          | 2345678909  | BU617        |
+|             10 | Organization J | 100 Strategy St, Maseru        | 2345678910  | BU718        |
+|             11 | Organization K | 110 Success Ln, Maseru         | 2345678911  | BU819        |
+|             12 | Organization L | 120 Vision Rd, Maseru          | 2345678912  | BU920        |
+|             13 | Organization M | 130 Leadership Blvd, Maseru    | 2345678913  | BU021        |
+|             14 | Organization N | 140 Innovation Park, Maseru    | 2345678914  | BU122        |
+|             15 | Organization O | 150 Partnership St, Maseru     | 2345678915  | BU223        |
+|             16 | Organization P | 160 Collaboration Blvd, Maseru | 2345678916  | BU324        |
++----------------+----------------+--------------------------------+-------------+--------------+
+16 rows in set (0.00 sec)
+
+mysql> select * from employment;
++--------------+----------+----------------+----------------+-----------------+---------+
+| EmploymentID | PersonID | OrganizationID | EmploymentDate | TerminationDate | Bonus   |
++--------------+----------+----------------+----------------+-----------------+---------+
+|            1 |        1 |              1 | 2020-01-01     | NULL            | 1500.00 |
+|            2 |        2 |              1 | 2021-02-15     | NULL            | 2000.00 |
+|            3 |        3 |              2 | 2019-03-01     | NULL            | 2500.00 |
+|            4 |        4 |              2 | 2020-04-01     | 2023-01-01      | 1000.00 |
+|            5 |        5 |              3 | 2018-05-01     | NULL            | 1200.00 |
+|            6 |        6 |              3 | 2020-06-01     | NULL            | 1800.00 |
+|            7 |        7 |              4 | 2021-07-01     | NULL            | 1600.00 |
+|            8 |        8 |              4 | 2022-07-01     | NULL            | 1400.00 |
+|            9 |        9 |              5 | 2023-08-01     | NULL            | 1100.00 |
+|           10 |       10 |              5 | 2017-09-01     | 2022-09-01      |  900.00 |
+|           11 |       11 |              6 | 2016-10-01     | NULL            | 3000.00 |
+|           12 |       12 |              1 | 2020-11-01     | NULL            | 1000.00 |
+|           13 |       13 |              2 | 2021-12-01     | NULL            | 1700.00 |
+|           14 |       14 |              3 | 2022-01-01     | NULL            | 1350.00 |
+|           15 |       15 |              3 | 2020-02-01     | NULL            | 1550.00 |
+|           16 |       16 |              4 | 2020-03-01     | NULL            | 1250.00 |
++--------------+----------+----------------+----------------+-----------------+---------+
+16 rows in set (0.00 sec)
+
+mysql> select * from organization;
++----------------+----------------+--------------------------------+-------------+--------------+
+| OrganizationID | Name           | Address                        | PhoneNumber | BudgetNumber |
++----------------+----------------+--------------------------------+-------------+--------------+
+|              1 | Organization A | 10 Business Rd, Maseru         | 2345678901  | BU123        |
+|              2 | Organization B | 20 Commerce St, Maseru         | 2345678902  | BU456        |
+|              3 | Organization C | 30 Industry Rd, Maseru         | 2345678903  | BU789        |
+|              4 | Organization D | 40 Trade St, Maseru            | 2345678904  | BU101        |
+|              5 | Organization E | 50 Market St, Maseru           | 2345678905  | BU112        |
+|              6 | Organization F | 60 Corporate Way, Maseru       | 2345678906  | BU131        |
+|              7 | Organization G | 70 Innovation Blvd, Maseru     | 2345678907  | BU415        |
+|              8 | Organization H | 80 Development Dr, Maseru      | 2345678908  | BU516        |
+|              9 | Organization I | 90 Growth Ave, Maseru          | 2345678909  | BU617        |
+|             10 | Organization J | 100 Strategy St, Maseru        | 2345678910  | BU718        |
+|             11 | Organization K | 110 Success Ln, Maseru         | 2345678911  | BU819        |
+|             12 | Organization L | 120 Vision Rd, Maseru          | 2345678912  | BU920        |
+|             13 | Organization M | 130 Leadership Blvd, Maseru    | 2345678913  | BU021        |
+|             14 | Organization N | 140 Innovation Park, Maseru    | 2345678914  | BU122        |
+|             15 | Organization O | 150 Partnership St, Maseru     | 2345678915  | BU223        |
+|             16 | Organization P | 160 Collaboration Blvd, Maseru | 2345678916  | BU324        |
++----------------+----------------+--------------------------------+-------------+--------------+
+16 rows in set (0.00 sec)
+
+mysql> select * from parttimeemployee;
++----------+------------+
+| PersonID | ExtraHours |
++----------+------------+
+|        1 |          5 |
+|        2 |         10 |
+|        3 |          2 |
+|        4 |         15 |
+|        5 |         12 |
+|        6 |          8 |
+|        7 |          4 |
+|        8 |          6 |
+|        9 |         11 |
+|       10 |          3 |
+|       11 |          9 |
+|       12 |          5 |
+|       13 |          7 |
+|       14 |          2 |
+|       15 |          8 |
+|       16 |         12 |
++----------+------------+
+16 rows in set (0.00 sec)
+
+mysql> select * from permanentemployee;
++----------+------------+---------+
+| PersonID | ExtraBonus | Credit  |
++----------+------------+---------+
+|        1 |     500.00 | 1000.00 |
+|        2 |     750.00 | 1200.00 |
+|        3 |     300.00 |  800.00 |
+|        4 |     650.00 | 1500.00 |
+|        5 |    1000.00 | 2000.00 |
+|        6 |     550.00 |  900.00 |
+|        7 |     400.00 |  950.00 |
+|        8 |     600.00 | 1100.00 |
+|        9 |     300.00 |  950.00 |
+|       10 |     500.00 | 1200.00 |
+|       11 |     700.00 | 1400.00 |
+|       12 |     800.00 | 1300.00 |
+|       13 |     650.00 | 1600.00 |
+|       14 |     550.00 | 1190.00 |
+|       15 |     350.00 |  870.00 |
+|       16 |     400.00 | 1050.00 |
++----------+------------+---------+
+16 rows in set (0.00 sec)
+
+mysql> select * from person;
++----------+---------------------+---------------------------+-------------+------------+
+| PersonID | Name                | Address                   | PhoneNumber | BirthDate  |
++----------+---------------------+---------------------------+-------------+------------+
+|        1 | Mokopu Mokopu       | 123 Main St, Maseru       | 1234567890  | 1990-01-01 |
+|        2 | Seshabo Mokopu      | 234 Elm St, Maseru        | 1234567891  | 1988-02-02 |
+|        3 | Makoetje Mokopu     | 345 Oak St, Maseru        | 1234567892  | 1992-03-03 |
+|        4 | Thabelo Mokopu      | 456 Pine St, Maseru       | 1234567893  | 1985-04-04 |
+|        5 | Selebalo Tefo       | 567 Maple St, Maseru      | 1234567894  | 1975-05-05 |
+|        6 | Lepu Lepu           | 678 Birch St, Maseru      | 1234567895  | 1995-06-06 |
+|        7 | Mosito Mosito       | 789 Cedar St, Maseru      | 1234567896  | 1993-07-07 |
+|        8 | Mothibeli Mothibeli | 890 Willow St, Maseru     | 1234567897  | 1980-08-08 |
+|        9 | Thato Thato         | 1010 Fir St, Maseru       | 1234567898  | 1998-09-09 |
+|       10 | Bohashana Bohashana | 2020 Spruce St, Maseru    | 1234567899  | 1991-10-10 |
+|       11 | Tebello Tebello     | 3030 Cherry St, Maseru    | 1234567800  | 1989-11-11 |
+|       12 | Pitso Pitso         | 4040 Chestnut St, Maseru  | 1234567801  | 1994-12-12 |
+|       13 | Kgotso Kgotso       | 5050 Ash St, Maseru       | 1234567802  | 1986-09-15 |
+|       14 | Moeletsi Moeletsi   | 6060 Acorn St, Maseru     | 1234567803  | 1997-03-19 |
+|       15 | Matšela Matšela     | 7070 Linden St, Maseru    | 1234567804  | 1992-07-23 |
+|       16 | Tšiu Tšiu           | 8080 Maplewood St, Maseru | 1234567805  | 1984-12-30 |
++----------+---------------------+---------------------------+-------------+------------+
+16 rows in set (0.00 sec)
+
+mysql> select * from position;
++------------+------------------------+---------------------------+
+| PositionID | Title                  | ResponsibleOrganizationID |
++------------+------------------------+---------------------------+
+|          1 | Manager                |                         1 |
+|          2 | Assistant Manager      |                         1 |
+|          3 | Team Leader            |                         2 |
+|          4 | Senior Developer       |                         2 |
+|          5 | Junior Developer       |                         3 |
+|          6 | Intern                 |                         3 |
+|          7 | HR Manager             |                         1 |
+|          8 | Project Manager        |                         1 |
+|          9 | Software Engineer      |                         2 |
+|         10 | Database Administrator |                         2 |
+|         11 | QA Engineer            |                         3 |
+|         12 | Business Analyst       |                         3 |
+|         13 | UX/UI Designer         |                         2 |
+|         14 | System Administrator   |                         3 |
+|         15 | Network Engineer       |                         2 |
+|         16 | Technical Writer       |                         1 |
++------------+------------------------+---------------------------+
+16 rows in set (0.00 sec)
+
+mysql> select * from positionholding;
++-------------------+--------------+------------+------------+-----------------+----------+
+| PositionHoldingID | EmploymentID | PositionID | StartDate  | TerminationDate | Salary   |
++-------------------+--------------+------------+------------+-----------------+----------+
+|                 1 |            1 |          1 | 2020-01-01 | NULL            | 50000.00 |
+|                 2 |            2 |          2 | 2021-02-15 | NULL            | 35000.00 |
+|                 3 |            3 |          3 | 2019-03-01 | NULL            | 60000.00 |
+|                 4 |            4 |          4 | 2020-04-01 | 2023-01-01      | 70000.00 |
+|                 5 |            5 |          5 | 2018-05-01 | NULL            | 40000.00 |
+|                 6 |            6 |          6 | 2020-06-01 | NULL            | 30000.00 |
+|                 7 |            7 |          1 | 2021-07-01 | NULL            | 55000.00 |
+|                 8 |            8 |          2 | 2022-07-01 | NULL            | 38000.00 |
+|                 9 |            9 |          3 | 2023-08-01 | NULL            | 62000.00 |
+|                10 |           10 |          4 | 2017-09-01 | 2022-09-01      | 45000.00 |
+|                11 |           11 |          5 | 2016-10-01 | NULL            | 29500.00 |
+|                12 |           12 |          1 | 2020-11-01 | NULL            | 51500.00 |
+|                13 |           13 |          2 | 2021-12-01 | NULL            | 33000.00 |
+|                14 |           14 |          3 | 2022-01-01 | NULL            | 58000.00 |
+|                15 |           15 |          3 | 2020-02-01 | NULL            | 42500.00 |
+|                16 |           16 |          4 | 2020-03-01 | NULL            | 52000.00 |
++-------------------+--------------+------------+------------+-----------------+----------+
+16 rows in set (0.00 sec)
+
+mysql> CREATE VIEW organization_overview AS
+    -> SELECT OrganizationID, Name, Address, PhoneNumber
+    -> FROM Organization;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE VIEW organization_budget AS
+    -> SELECT OrganizationID, Name, BudgetNumber FROM Organization;
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> CREATE VIEW PartTimeEmployeeDetails AS
+    -> SELECT
+    ->     PartTimeEmployee.PersonID AS EmployeeID,
+    ->     Person.Name AS EmployeeName,
+    ->     PartTimeEmployee.ExtraHours AS ExtraHoursWorked
+    -> FROM
+    ->     PartTimeEmployee
+    -> JOIN Person ON PartTimeEmployee.PersonID = Person.PersonID;
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> CREATE VIEW HighHourPartTimeEmployees AS
+    -> SELECT
+    ->     PartTimeEmployee.PersonID AS EmployeeID,
+    ->     Person.Name AS EmployeeName,
+    ->     PartTimeEmployee.ExtraHours AS ExtraHoursWorked
+    -> FROM
+    ->     PartTimeEmployee
+    -> JOIN Person ON PartTimeEmployee.PersonID = Person.PersonID
+    -> WHERE
+    ->     PartTimeEmployee.ExtraHours > 10;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> CREATE VIEW PermanentEmployeeDetails AS
+    -> SELECT
+    ->     PermanentEmployee.PersonID,
+    ->     Person.Name,
+    ->     PermanentEmployee.ExtraBonus,
+    ->     PermanentEmployee.Credit
+    -> FROM
+    ->     PermanentEmployee
+    -> JOIN
+    ->     Person ON PermanentEmployee.PersonID = Person.PersonID;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE VIEW HighBonusPermanentEmployees AS
+    -> SELECT
+    ->     PermanentEmployee.PersonID,
+    ->     Person.Name,
+    ->     PermanentEmployee.ExtraBonus
+    -> FROM
+    ->     PermanentEmployee
+    -> JOIN
+    ->     Person ON PermanentEmployee.PersonID = Person.PersonID
+    -> WHERE
+    ->     PermanentEmployee.ExtraBonus > 600;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE VIEW PersonBirthDates AS
+    -> SELECT PersonID, Name, BirthDate
+    -> FROM Person;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE VIEW AdultPersons AS
+    -> SELECT PersonID, Name, BirthDate
+    -> FROM Person
+    -> WHERE YEAR(CURDATE()) - YEAR(BirthDate) >= 18;
+Query OK, 0 rows affected (0.81 sec)
+
+mysql> CREATE VIEW PositionDetails AS
+    -> SELECT
+    ->     Position.PositionID,
+    ->     Position.Title,
+    ->     Organization.Name AS Organization
+    -> FROM
+    ->     Position
+    -> JOIN
+    ->     Organization ON Position.ResponsibleOrganizationID = Organization.OrganizationID;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> -- View for positions with the count of employees holding each position
+mysql> CREATE VIEW PositionEmployeeCount AS
+    -> SELECT
+    ->     Position.PositionID AS PositionIdentifier,
+    ->     Position.Title AS PositionTitle,
+    ->     COUNT(PositionHolding.EmploymentID) AS NumberOfEmployees
+    -> FROM
+    ->     Position
+    -> LEFT JOIN
+    ->     PositionHolding ON Position.PositionID = PositionHolding.PositionID
+    -> GROUP BY
+    ->     Position.PositionID, Position.Title;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE VIEW ActivePositionHoldings AS
+    -> SELECT PositionHoldingID, EmploymentID, PositionID, StartDate, Salary
+    -> FROM PositionHolding
+    -> WHERE TerminationDate IS NULL;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE VIEW BasicPositionHolding AS
+    -> SELECT PositionHoldingID, EmploymentID, PositionID, StartDate, TerminationDate, Salary
+    -> FROM PositionHolding;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> SELECT * FROM EmploymentDetails;
++--------------+---------------------+------------------+----------------+-----------------+
+| EmploymentID | EmployeeName        | OrganizationName | EmploymentDate | TerminationDate |
++--------------+---------------------+------------------+----------------+-----------------+
+|            1 | Mokopu Mokopu       | Organization A   | 2020-01-01     | NULL            |
+|            2 | Seshabo Mokopu      | Organization A   | 2021-02-15     | NULL            |
+|           12 | Pitso Pitso         | Organization A   | 2020-11-01     | NULL            |
+|            3 | Makoetje Mokopu     | Organization B   | 2019-03-01     | NULL            |
+|            4 | Thabelo Mokopu      | Organization B   | 2020-04-01     | 2023-01-01      |
+|           13 | Kgotso Kgotso       | Organization B   | 2021-12-01     | NULL            |
+|            5 | Selebalo Tefo       | Organization C   | 2018-05-01     | NULL            |
+|            6 | Lepu Lepu           | Organization C   | 2020-06-01     | NULL            |
+|           14 | Moeletsi Moeletsi   | Organization C   | 2022-01-01     | NULL            |
+|           15 | Matšela Matšela     | Organization C   | 2020-02-01     | NULL            |
+|            7 | Mosito Mosito       | Organization D   | 2021-07-01     | NULL            |
+|            8 | Mothibeli Mothibeli | Organization D   | 2022-07-01     | NULL            |
+|           16 | Tšiu Tšiu           | Organization D   | 2020-03-01     | NULL            |
+|            9 | Thato Thato         | Organization E   | 2023-08-01     | NULL            |
+|           10 | Bohashana Bohashana | Organization E   | 2017-09-01     | 2022-09-01      |
+|           11 | Tebello Tebello     | Organization F   | 2016-10-01     | NULL            |
++--------------+---------------------+------------------+----------------+-----------------+
+16 rows in set (0.41 sec)
+
+mysql> SELECT * FROM ActiveEmployment;
++--------------+------------+----------------+----------------+
+| EmploymentID | EmployeeID | OrganizationID | EmploymentDate |
++--------------+------------+----------------+----------------+
+|            1 |          1 |              1 | 2020-01-01     |
+|            2 |          2 |              1 | 2021-02-15     |
+|            3 |          3 |              2 | 2019-03-01     |
+|            5 |          5 |              3 | 2018-05-01     |
+|            6 |          6 |              3 | 2020-06-01     |
+|            7 |          7 |              4 | 2021-07-01     |
+|            8 |          8 |              4 | 2022-07-01     |
+|            9 |          9 |              5 | 2023-08-01     |
+|           11 |         11 |              6 | 2016-10-01     |
+|           12 |         12 |              1 | 2020-11-01     |
+|           13 |         13 |              2 | 2021-12-01     |
+|           14 |         14 |              3 | 2022-01-01     |
+|           15 |         15 |              3 | 2020-02-01     |
+|           16 |         16 |              4 | 2020-03-01     |
++--------------+------------+----------------+----------------+
+14 rows in set (0.00 sec)
+
+mysql> DELETE FROM Organization WHERE OrganizationID = 16;
+Query OK, 1 row affected (0.06 sec)
+
+mysql> DELETE FROM Organization WHERE OrganizationID = 15;
+Query OK, 1 row affected (0.02 sec)
+
+
+mysql> DELETE FROM PositionHolding WHERE EmploymentID IN (1, 2);
+Query OK, 2 rows affected (0.10 sec)
+
+mysql> DELETE FROM Employment WHERE EmploymentID IN (1, 2);
+Query OK, 2 rows affected (0.05 sec)
+
+
+mysql> DELETE FROM Employment WHERE EmploymentID = 2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELETE FROM PartTimeEmployee WHERE PersonID = 1;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> DELETE FROM PartTimeEmployee WHERE PersonID = 2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM PermanentEmployee WHERE PersonID = 1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM PermanentEmployee WHERE PersonID = 2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM Person WHERE PersonID = 1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM Person WHERE PersonID = 2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DELETE FROM PositionHolding WHERE PositionID = 1;
+Query OK, 2 rows affected (0.07 sec)
+
+mysql> DELETE FROM PositionHolding WHERE PositionID = 2;
+Query OK, 2 rows affected (0.07 sec)
+
+mysql> DELETE FROM Position WHERE PositionID = 1;
+Query OK, 1 row affected (0.16 sec)
+
+mysql> DELETE FROM Position WHERE PositionID = 2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> UPDATE Organization SET PhoneNumber = '2345678900' WHERE OrganizationID = 16;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE Organization SET Address = 'New Address, Maseru' WHERE OrganizationID = 15;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE Employment SET Bonus = 2000.00 WHERE EmploymentID = 16;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Employment SET TerminationDate = '2023-12-31' WHERE EmploymentID = 15;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE PartTimeEmployee SET ExtraHours = 10 WHERE PersonID = 16;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE PartTimeEmployee SET ExtraHours = 8 WHERE PersonID = 15;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> UPDATE PermanentEmployee SET ExtraBonus = 600.00 WHERE PersonID = 16;
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE PermanentEmployee SET Credit = 1300.00 WHERE PersonID = 15;
+Query OK, 1 row affected (0.58 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Person SET PhoneNumber = '1234567805' WHERE PersonID = 16;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> UPDATE Person SET Address = 'Updated Address, Maseru' WHERE PersonID = 15;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Position SET Title = 'Senior Manager' WHERE PositionID = 16;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Position SET ResponsibleOrganizationID = 1 WHERE PositionID = 15;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE PositionHolding SET Salary = 55000.00 WHERE PositionHoldingID = 16;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE PositionHolding SET StartDate = '2023-01-01' WHERE PositionHoldingID = 15;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+mysql> CREATE TABLE InsertAudit (
+    ->     AuditID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     TableName VARCHAR(255),
+    ->     InsertedID INT,
+    ->     InsertedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> DELIMITER //
+mysql> CREATE TRIGGER BeforeOrganizationInsert
+    -> BEFORE INSERT ON Organization
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     -- Optional: Add validation or other logic if needed
+    -> END;
+Query OK, 0 rows affected (0.05 sec)
+
+
+mysql>
+mysql> CREATE TRIGGER after_insert_Employment_1
+    -> AFTER INSERT ON Employment
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('Employment', NEW.EmploymentID);
+    -> END; //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TRIGGER after_insert_Employment_2
+    -> AFTER INSERT ON Employment
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     -- Example of setting default values or modifying data related to the employment
+    ->     UPDATE Employment SET Bonus = 500.00 WHERE EmploymentID = NEW.EmploymentID;
+    -> END; //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER //
+mysql>
+mysql> -- Trigger for after insert
+mysql> CREATE TRIGGER after_insert_PartTimeEmployee
+    -> AFTER INSERT ON PartTimeEmployee
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PartTimeEmployee', NEW.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> CREATE TRIGGER after_update_PartTimeEmployee
+    -> AFTER UPDATE ON PartTimeEmployee
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PartTimeEmployee', NEW.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> -- Trigger for after insert
+mysql> CREATE TRIGGER after_insert_PermanentEmployee
+    -> AFTER INSERT ON PermanentEmployee
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PermanentEmployee', NEW.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TRIGGER after_delete_PermanentEmployee
+    -> AFTER DELETE ON PermanentEmployee
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PermanentEmployee', OLD.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> -- Trigger for after insert
+mysql> CREATE TRIGGER after_insert_Person
+    -> AFTER INSERT ON Person
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('Person', NEW.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TRIGGER after_update_Person
+    -> AFTER UPDATE ON Person
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('Person', NEW.PersonID);
+    -> END; //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> -- Trigger for after insert
+mysql> CREATE TRIGGER after_insert_Position
+    -> AFTER INSERT ON Position
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('Position', NEW.PositionID);
+    -> END; //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TRIGGER after_update_Position
+    -> AFTER UPDATE ON Position
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('Position', NEW.PositionID);
+    -> END; //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> -- Trigger for after insert
+mysql> CREATE TRIGGER after_insert_PositionHolding
+    -> AFTER INSERT ON PositionHolding
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PositionHolding', NEW.PositionHoldingID);
+    -> END; //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE TRIGGER after_update_PositionHolding
+    -> AFTER UPDATE ON PositionHolding
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     INSERT INTO InsertAudit (TableName, InsertedID)
+    ->     VALUES ('PositionHolding', NEW.PositionHoldingID);
+    -> END; //
+Query OK, 0 rows affected (0.50 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+
+
+
+
+mysql> CREATE FUNCTION GetEmployeeFullName(empID INT)
+    -> RETURNS VARCHAR(255)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE empFullName VARCHAR(255);
+    ->
+    ->     SELECT CONCAT(FirstName, ' ', LastName)
+    ->     INTO empFullName
+    ->     FROM Employment
+    ->     WHERE EmploymentID = empID;
+    ->
+    ->     RETURN empFullName;
+    -> END; //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> CREATE FUNCTION GetOrganizationName(orgID INT)
+    -> RETURNS VARCHAR(255)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE orgName VARCHAR(255);
+    ->
+    ->     SELECT OrganizationName
+    ->     INTO orgName
+    ->     FROM Organization
+    ->     WHERE OrganizationID = orgID;
+    ->
+    ->     RETURN orgName;
+    -> END; //
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE AddOrganization(
+    ->     IN orgName VARCHAR(255)
+    -> )
+    -> BEGIN
+    ->     INSERT INTO Organization (OrganizationName)
+    ->     VALUES (orgName);
+    -> END; //
+Query OK, 0 rows affected (0.38 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE DeleteEmployee(
+    ->     IN empID INT
+    -> )
+    -> BEGIN
+    ->     DELETE FROM Employment
+    ->     WHERE EmploymentID = empID;
+    -> END; //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql>
+
+mysql> CREATE USER 'MOKOPU'@'localhost' IDENTIFIED BY 'MOKO18';
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> CREATE USER 'MOSITO@localhost' IDENTIFIED BY 'MOSITO21';
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> GRANT DELETE,UPDATE ON person to 'MOKOPU'@'localhost';
+Query OK, 0 rows affected (0.28 sec)
+
+mysql> GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP ON tt_holding TO 'MOKOPU'@'localhost';
+Query OK, 0 rows affected (0.05 sec)
+
+
+mysql> GRANT SELECT, DELETE, UPDATE ON employment TO 'MOSITO@localhost';
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> GRANT SELECT, DELETE, UPDATE, INSERT ON positionholding TO 'MOSITO@localhost';
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> SELECT
+    ->     TRIGGER_NAME,
+    ->     EVENT_MANIPULATION,
+    ->     EVENT_OBJECT_TABLE,
+    ->     ACTION_TIMING,
+    ->     EVENT_OBJECT_SCHEMA,
+    ->     ACTION_STATEMENT
+    -> FROM
+    ->     information_schema.TRIGGERS
+    -> WHERE
+    ->     TRIGGER_SCHEMA = 'tt_holding';
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+| TRIGGER_NAME                   | EVENT_MANIPULATION | EVENT_OBJECT_TABLE | ACTION_TIMING | EVENT_OBJECT_SCHEMA | ACTION_STATEMENT                                                                                                      |
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+| after_insert_Organization_1    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Organization', NEW.OrganizationID);
+END       |
+| after_insert_Organization_2    | INSERT             | organization       | AFTER         | tt_holding          | BEGIN
+
+    UPDATE Organization SET CreatedAt = NOW() WHERE OrganizationID = NEW.OrganizationID;
+END               |
+| after_insert_Employment_1      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Employment', NEW.EmploymentID);
+END           |
+| after_insert_Employment_2      | INSERT             | employment         | AFTER         | tt_holding          | BEGIN
+
+    UPDATE Employment SET Bonus = 500.00 WHERE EmploymentID = NEW.EmploymentID;
+END                        |
+| after_insert_PartTimeEmployee  | INSERT             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PartTimeEmployee', NEW.PersonID);
+END         |
+| after_update_PartTimeEmployee  | UPDATE             | parttimeemployee   | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PartTimeEmployee', NEW.PersonID);
+END         |
+| after_insert_PermanentEmployee | INSERT             | permanentemployee  | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PermanentEmployee', NEW.PersonID);
+END        |
+| after_delete_PermanentEmployee | DELETE             | permanentemployee  | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PermanentEmployee', OLD.PersonID);
+END        |
+| after_insert_Person            | INSERT             | person             | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Person', NEW.PersonID);
+END                   |
+| after_update_Person            | UPDATE             | person             | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Person', NEW.PersonID);
+END                   |
+| after_insert_Position          | INSERT             | position           | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Position', NEW.PositionID);
+END               |
+| after_update_Position          | UPDATE             | position           | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('Position', NEW.PositionID);
+END               |
+| after_insert_PositionHolding   | INSERT             | positionholding    | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PositionHolding', NEW.PositionHoldingID);
+END |
+| after_update_PositionHolding   | UPDATE             | positionholding    | AFTER         | tt_holding          | BEGIN
+    INSERT INTO InsertAudit (TableName, InsertedID)
+    VALUES ('PositionHolding', NEW.PositionHoldingID);
+END |
++--------------------------------+--------------------+--------------------+---------------+---------------------+-----------------------------------------------------------------------------------------------------------------------+
+14 rows in set (0.13 sec)
+
+mysql>   
+
+
